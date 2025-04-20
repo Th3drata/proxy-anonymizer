@@ -8,7 +8,7 @@ A modern proxy management and IP anonymization tool that helps you maintain priv
 - **Automatic Proxy Rotation**: Rotate through proxies at configurable intervals
 - **Tor Integration**: Seamless integration with Tor network as a fallback
 - **Firefox Integration**: Automatic configuration of Firefox proxy settings
-- **Free Proxy Scraping**: Automatically fetch and verify free proxies from multiple sources
+- **Proxy Scraping**: Automatically fetch and verify proxies from multiple sources
 - **Cross-Platform**: Works on Linux distributions (Debian, Arch, RHEL-based)
 - **Local Proxy Server**: Built-in local proxy server for easy browser configuration
 
@@ -48,7 +48,7 @@ The program provides a simple menu-driven interface with the following options:
 
 1. **Change proxy**: Manually switch to a different proxy
 2. **List available proxies**: View all configured proxies
-3. **Update free proxies**: Fetch and verify new free proxies
+3. **Update proxies**: Fetch and verify new proxies
 4. **Start proxy rotation**: Begin automatic proxy rotation
 5. **Exit**: Close the program
 
@@ -73,7 +73,7 @@ The program stores its configuration in:
 
 ## Security Notes
 
-- The program uses free proxies, which may not be secure or reliable
+- The program uses public proxies, which may not be secure or reliable
 - Always verify the security of any proxy before using it
 - Consider using Tor for maximum anonymity
 - The program does not encrypt your traffic - use HTTPS for secure connections
@@ -99,3 +99,17 @@ Under the following terms:
 - NonCommercial — You may not use the material for commercial purposes.
 
 For more information, see the [LICENSE](LICENSE) file.
+
+## About
+
+This project is maintained by [Th3drata](https://github.com/Th3drata). Feel free to contribute by opening issues or submitting pull requests.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request 

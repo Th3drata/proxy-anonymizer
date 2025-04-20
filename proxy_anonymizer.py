@@ -376,7 +376,7 @@ class ProxyAnonymizer:
         print("\n\033[1;36mOptions:\033[0m")
         print("\033[1;33m1\033[0m. Change proxy")
         print("\033[1;33m2\033[0m. List available proxies")
-        print("\033[1;33m3\033[0m. Update free proxies")
+        print("\033[1;33m3\033[0m. Update proxies")
         print("\033[1;33m4\033[0m. Start proxy rotation")
         print("\033[1;33m5\033[0m. Exit")
 
@@ -393,11 +393,11 @@ class ProxyAnonymizer:
             status = "\033[1;32m✓\033[0m" if proxy == self.current_proxy else " "
             print(f"{status} {i}. {proxy['type']}://{proxy['host']}:{proxy['port']}")
 
-    def fetch_free_proxies(self) -> List[Dict[str, str]]:
-        """Fetch free proxies from various sources"""
+    def fetch_proxies(self) -> List[Dict[str, str]]:
+        """Fetch proxies from various sources"""
         proxies = []
         sources = [
-            "https://free-proxy-list.net/",
+            "https://proxy-list.net/",
             "https://www.sslproxies.org/",
             "https://www.us-proxy.org/"
         ]
@@ -431,11 +431,11 @@ class ProxyAnonymizer:
 
         return proxies
 
-    def update_free_proxies(self) -> None:
-        """Update the proxy list with fresh free proxies"""
+    def update_proxies(self) -> None:
+        """Update the proxy list with fresh proxies"""
         clear_screen()
         self.print_banner()
-        print("\n\033[1;36mUpdating free proxies...\033[0m")
+        print("\n\033[1;36mUpdating proxies...\033[0m")
         
         try:
             # Get desired number of proxies
@@ -452,8 +452,8 @@ class ProxyAnonymizer:
                 except ValueError:
                     print("\033[1;31mPlease enter a valid number.\033[0m")
             
-            logging.info("Fetching free proxies...")
-            new_proxies = self.fetch_free_proxies()
+            logging.info("Fetching proxies...")
+            new_proxies = self.fetch_proxies()
             print(f"\nFound {len(new_proxies)} potential proxies")
             
             print(f"\nVerifying proxies until finding {desired_quantity} working ones (this may take a few minutes)...")
@@ -737,12 +737,7 @@ def main():
     try:
         while True:
             anonymizer.print_banner()
-            print("\n\033[1;36mOptions:\033[0m")
-            print("\033[1;33m1\033[0m. Change proxy")
-            print("\033[1;33m2\033[0m. List available proxies")
-            print("\033[1;33m3\033[0m. Update free proxies")
-            print("\033[1;33m4\033[0m. Start proxy rotation")
-            print("\033[1;33m5\033[0m. Exit")
+            anonymizer.print_menu()
             
             choice = input("\nEnter your choice (1-5): ").strip()
             
@@ -757,7 +752,7 @@ def main():
                 input()
             
             elif choice == "3":
-                anonymizer.update_free_proxies()
+                anonymizer.update_proxies()
             
             elif choice == "4":
                 anonymizer.start_proxy_rotation()
