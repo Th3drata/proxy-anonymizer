@@ -23,7 +23,7 @@ A modern proxy management and IP anonymization tool that helps you maintain priv
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/Th3drata/proxy-anonymizer.git
 cd proxy-anonymizer
 ```
 
@@ -88,8 +88,4 @@ The program stores its configuration in:
 
 ## License
 
-[Add your license information here]
-
-## Contributing
-
-[Add contribution guidelines here] 
+See the licence file
