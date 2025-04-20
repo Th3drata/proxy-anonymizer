@@ -23,7 +23,7 @@ A modern proxy management and IP anonymization tool that helps you maintain priv
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/Th3drata/proxy-anonymizer.git
+git clone <repository-url>
 cd proxy-anonymizer
 ```
 
@@ -88,4 +88,18 @@ The program stores its configuration in:
 
 ## License
 
-See the licence file
+This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) license. This means you are free to:
+
+- Share — copy and redistribute the material in any medium or format
+- Adapt — remix, transform, and build upon the material
+
+Under the following terms:
+
+- Attribution — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+- NonCommercial — You may not use the material for commercial purposes.
+
+For more information, see the [LICENSE](LICENSE) file.
+
+## Contributing
+
+[Add contribution guidelines here] 
