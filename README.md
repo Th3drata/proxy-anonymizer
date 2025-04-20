@@ -1,6 +1,28 @@
-# Proxy Anonymizer
+# Proxy Anonymizer v1.2
 
-A modern proxy management and IP anonymization tool that helps you maintain privacy and security while browsing the internet. This tool allows you to rotate through multiple proxies, including Tor, to keep your IP address anonymous.
+A modern proxy management and IP anonymization tool that helps you maintain privacy while browsing the internet. This tool allows you to rotate through multiple proxies, including Tor, to keep your IP address anonymous.
+
+## Changelog
+
+### v1.2
+- Added system-wide installation script
+- Improved installation process
+- Removed SSL/TLS encryption for better compatibility
+- Added automatic dependency installation
+- Added configuration directory in ~/.config/proxy-anonymizer/
+
+### v1.1
+- Added proxy list cleanup feature
+- Added netcat requirement check
+- Improved proxy verification
+- Added automatic netcat installation
+
+### v1.0
+- Initial release
+- Basic proxy management
+- Tor integration
+- Firefox configuration
+- Proxy rotation
 
 ## Features
 
@@ -22,6 +44,34 @@ A modern proxy management and IP anonymization tool that helps you maintain priv
 - netcat (nc) - Required for some features
 
 ## Installation
+
+### Quick Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/Th3drata/proxy-anonymizer.git
+cd proxy-anonymizer
+```
+
+2. Run the installation script:
+```bash
+sudo python3 install.py
+```
+
+This will:
+- Install all required dependencies
+- Create a system-wide command `anonymizer`
+- Set up configuration files in `~/.config/proxy-anonymizer/`
+- Create log files in `~/.proxy_anonymizer.log`
+
+3. Run the program:
+```bash
+anonymizer
+```
+
+### Manual Installation
+
+If you prefer to install manually:
 
 1. Clone the repository:
 ```bash
@@ -47,8 +97,39 @@ pip install -r requirements.txt
 The script will automatically:
 - Install required Python dependencies
 - Install and configure Tor (if not already installed)
+- Install netcat if not present
 - Create necessary configuration files
 - Check for required system tools
+
+### Arch Linux Installation
+
+For Arch Linux users, you can install the requirements using pacman:
+
+1. Install system dependencies:
+```bash
+sudo pacman -S python python-pip tor gnu-netcat
+```
+
+2. Install Python packages:
+```bash
+pip install -r requirements.txt
+```
+
+3. Make the script executable:
+```bash
+chmod +x proxy_anonymizer.py
+```
+
+4. Start Tor service:
+```bash
+sudo systemctl start tor
+sudo systemctl enable tor  # Optional: enable Tor to start on boot
+```
+
+5. Run the script:
+```bash
+./proxy_anonymizer.py
+```
 
 ## Usage
 
@@ -85,7 +166,7 @@ The program stores its configuration in:
 - The program uses public proxies, which may not be secure or reliable
 - Always verify the security of any proxy before using it
 - Consider using Tor for maximum anonymity
-- The program does not encrypt your traffic - use HTTPS for secure connections
+- For maximum security, use trusted proxy servers
 
 ## Troubleshooting
 

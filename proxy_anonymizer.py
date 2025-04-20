@@ -55,7 +55,7 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             pass
 
     def do_CONNECT(self):
-        """Handle CONNECT requests for HTTPS"""
+        """Handle CONNECT requests"""
         try:
             # Parse the host and port from the path
             host, port = self.path.split(':')
@@ -118,9 +118,15 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             url = self.path
             if not url.startswith('http'):
                 url = 'http://' + self.headers.get('Host', '') + url
-
+            
             # Forward the request through the current proxy
-            response = requests.get(url, proxies=self.proxies, timeout=10)
+            response = requests.get(
+                url, 
+                proxies=self.proxies, 
+                timeout=10,
+                headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+            )
+            
             self.send_response(response.status_code)
             for key, value in response.headers.items():
                 self.send_header(key, value)
@@ -140,7 +146,14 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             post_data = self.rfile.read(content_length)
             
             # Forward the request through the current proxy
-            response = requests.post(url, data=post_data, proxies=self.proxies, timeout=10)
+            response = requests.post(
+                url, 
+                data=post_data, 
+                proxies=self.proxies, 
+                timeout=10,
+                headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+            )
+            
             self.send_response(response.status_code)
             for key, value in response.headers.items():
                 self.send_header(key, value)
@@ -148,32 +161,6 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(response.content)
         except Exception:
             self.send_error(500)
-
-    def handle_one_request(self):
-        """Handle one request, possibly blocking."""
-        try:
-            self.raw_requestline = self.rfile.readline(65537)
-            if len(self.raw_requestline) > 65536:
-                self.requestline = ''
-                self.request_version = ''
-                self.command = ''
-                self.send_error(414)
-                return
-            if not self.raw_requestline:
-                self.close_connection = 1
-                return
-            if not self.parse_request():
-                return
-
-            mname = 'do_' + self.command
-            if not hasattr(self, mname):
-                self.send_error(501)
-                return
-            method = getattr(self, mname)
-            method()
-            self.wfile.flush()
-        except Exception:
-            self.close_connection = 1
 
 class ThreadedHTTPServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
     """Handle requests in a separate thread."""
@@ -291,7 +278,11 @@ class ProxyAnonymizer:
             # Try multiple times with different timeouts
             for _ in range(3):
                 try:
-                    response = requests.get(self.verify_url, proxies=proxies, timeout=10)
+                    response = requests.get(
+                        self.verify_url, 
+                        proxies=proxies, 
+                        timeout=10
+                    )
                     if response.status_code == 200:
                         return True
                 except requests.RequestException:
@@ -363,7 +354,7 @@ class ProxyAnonymizer:
         banner = """
         \033[1;32m
         ╔══════════════════════════════════════════════════════════╗
-        ║                 Proxy Anonymizer v1.1                    ║
+        ║                 Proxy Anonymizer v1.2                    ║
         ║                                                          ║
         ║  A modern proxy management and IP anonymization tool     ║
         ╚══════════════════════════════════════════════════════════╝
