@@ -357,6 +357,8 @@ class ProxyAnonymizer:
         ║                 Proxy Anonymizer v1.2                    ║
         ║                                                          ║
         ║  A modern proxy management and IP anonymization tool     ║
+        ║                                                          ║
+        ║                    Made by Th3drata                      ║
         ╚══════════════════════════════════════════════════════════╝
         \033[0m
         """

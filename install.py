@@ -102,17 +102,11 @@ def create_symlink():
         current_dir = os.path.abspath(os.path.dirname(__file__))
         script_path = os.path.join(current_dir, 'proxy_anonymizer.py')
         
-        os.makedirs('/usr/local/bin', exist_ok=True)
-        
-        symlink_path = '/usr/local/bin/anonymizer'
-        if os.path.exists(symlink_path):
-            os.remove(symlink_path)
-        os.symlink(script_path, symlink_path)
-        
-        os.chmod(script_path, 0o755)
-        os.chmod(symlink_path, 0o755)
+        target_path = '/usr/local/bin/anonymizer'
+        shutil.copy2(script_path, target_path)
+        os.chmod(target_path, 0o755)
     except Exception as e:
-        print(f"Failed to create symlink: {e}")
+        print(f"Failed to install program: {e}")
         sys.exit(1)
 
 def create_config_dir():
