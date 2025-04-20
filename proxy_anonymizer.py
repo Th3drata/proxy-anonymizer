@@ -363,7 +363,7 @@ class ProxyAnonymizer:
         banner = """
         \033[1;32m
         ╔══════════════════════════════════════════════════════════╗
-        ║                 Proxy Anonymizer v1.0                    ║
+        ║                 Proxy Anonymizer v1.1                    ║
         ║                                                          ║
         ║  A modern proxy management and IP anonymization tool     ║
         ╚══════════════════════════════════════════════════════════╝
@@ -371,14 +371,63 @@ class ProxyAnonymizer:
         """
         print(banner)
 
+    def check_nc_installed(self) -> bool:
+        """Check if netcat (nc) is installed"""
+        try:
+            subprocess.check_output('which nc', shell=True)
+            return True
+        except subprocess.CalledProcessError:
+            return False
+
+    def cleanup_proxy_list(self) -> None:
+        """Clean up the proxy list by removing non-working proxies"""
+        clear_screen()
+        self.print_banner()
+        print("\n\033[1;36mCleaning up proxy list...\033[0m")
+        
+        if not self.proxy_list:
+            print("\033[1;31mNo proxies available to clean up.\033[0m")
+            print("\nPress Enter to return to menu...")
+            input()
+            return
+        
+        original_count = len(self.proxy_list)
+        working_proxies = []
+        
+        print(f"\nVerifying {original_count} proxies...")
+        print("Press Ctrl+C to stop and return to menu")
+        
+        try:
+            for i, proxy in enumerate(self.proxy_list, 1):
+                print(f"\rChecking proxy {i}/{original_count}", end="")
+                if self.verify_proxy(proxy):
+                    working_proxies.append(proxy)
+            print()
+            
+            removed_count = original_count - len(working_proxies)
+            self.proxy_list = working_proxies
+            self.save_config()
+            
+            print(f"\n\033[1;32mCleanup complete!\033[0m")
+            print(f"Removed {removed_count} non-working proxies")
+            print(f"Kept {len(working_proxies)} working proxies")
+            print("\nPress Enter to return to menu...")
+            input()
+            
+        except KeyboardInterrupt:
+            print("\n\n\033[1;33mCleanup interrupted. Returning to menu...\033[0m")
+            time.sleep(1)
+            return
+
     def print_menu(self) -> None:
         """Print the main menu"""
         print("\n\033[1;36mOptions:\033[0m")
         print("\033[1;33m1\033[0m. Change proxy")
         print("\033[1;33m2\033[0m. List available proxies")
         print("\033[1;33m3\033[0m. Update proxies")
-        print("\033[1;33m4\033[0m. Start proxy rotation")
-        print("\033[1;33m5\033[0m. Exit")
+        print("\033[1;33m4\033[0m. Clean up proxy list")
+        print("\033[1;33m5\033[0m. Start proxy rotation")
+        print("\033[1;33m6\033[0m. Exit")
 
     def print_proxy_list(self) -> None:
         """Print the list of available proxies"""
@@ -729,17 +778,47 @@ user_pref("network.proxy.no_proxies_on", "");
             time.sleep(1)
             return
 
+    def install_netcat(self) -> None:
+        """Install netcat if not already installed"""
+        try:
+            if self.os_type == "arch":
+                subprocess.check_call('sudo pacman -Sy --noconfirm gnu-netcat', shell=True)
+            elif self.os_type == "debian":
+                subprocess.check_call('sudo apt update && sudo apt install -y netcat', shell=True)
+            elif self.os_type == "rhel":
+                subprocess.check_call('sudo dnf install -y nmap-ncat', shell=True)
+            else:
+                print("\n\033[1;31mUnsupported OS. Please install netcat manually.\033[0m")
+                print("Arch Linux: sudo pacman -S gnu-netcat")
+                print("Debian/Ubuntu: sudo apt install netcat")
+                print("RHEL/CentOS: sudo dnf install nmap-ncat")
+                print("\nPress Enter to continue...")
+                input()
+                return
+            print("\n\033[1;32mNetcat installed successfully!\033[0m")
+            time.sleep(1)
+        except subprocess.CalledProcessError as e:
+            print(f"\n\033[1;31mFailed to install netcat: {e}\033[0m")
+            print("Please install it manually using your package manager.")
+            print("\nPress Enter to continue...")
+            input()
+
 def main():
     anonymizer = ProxyAnonymizer()
     anonymizer.install_dependencies()
     anonymizer.install_tor()
+    
+    # Check and install netcat if needed
+    if not anonymizer.check_nc_installed():
+        print("\n\033[1;33mNetcat (nc) not found. Installing...\033[0m")
+        anonymizer.install_netcat()
     
     try:
         while True:
             anonymizer.print_banner()
             anonymizer.print_menu()
             
-            choice = input("\nEnter your choice (1-5): ").strip()
+            choice = input("\nEnter your choice (1-6): ").strip()
             
             if choice == "1":
                 anonymizer.change_proxy()
@@ -755,9 +834,12 @@ def main():
                 anonymizer.update_proxies()
             
             elif choice == "4":
-                anonymizer.start_proxy_rotation()
+                anonymizer.cleanup_proxy_list()
             
             elif choice == "5":
+                anonymizer.start_proxy_rotation()
+            
+            elif choice == "6":
                 print("\nExiting...")
                 break
             

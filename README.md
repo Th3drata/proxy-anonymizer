@@ -9,6 +9,7 @@ A modern proxy management and IP anonymization tool that helps you maintain priv
 - **Tor Integration**: Seamless integration with Tor network as a fallback
 - **Firefox Integration**: Automatic configuration of Firefox proxy settings
 - **Proxy Scraping**: Automatically fetch and verify proxies from multiple sources
+- **Proxy List Maintenance**: Clean up and verify existing proxy list
 - **Cross-Platform**: Works on Linux distributions (Debian, Arch, RHEL-based)
 - **Local Proxy Server**: Built-in local proxy server for easy browser configuration
 
@@ -18,6 +19,7 @@ A modern proxy management and IP anonymization tool that helps you maintain priv
 - Linux-based operating system (Debian, Arch, or RHEL-based)
 - Firefox browser (optional, for automatic proxy configuration)
 - Tor (optional, for Tor network integration)
+- netcat (nc) - Required for some features
 
 ## Installation
 
@@ -32,7 +34,12 @@ cd proxy-anonymizer
 chmod +x proxy_anonymizer.py
 ```
 
-3. Run the script:
+3. Install required dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+4. Run the script:
 ```bash
 ./proxy_anonymizer.py
 ```
@@ -41,6 +48,7 @@ The script will automatically:
 - Install required Python dependencies
 - Install and configure Tor (if not already installed)
 - Create necessary configuration files
+- Check for required system tools
 
 ## Usage
 
@@ -49,8 +57,9 @@ The program provides a simple menu-driven interface with the following options:
 1. **Change proxy**: Manually switch to a different proxy
 2. **List available proxies**: View all configured proxies
 3. **Update proxies**: Fetch and verify new proxies
-4. **Start proxy rotation**: Begin automatic proxy rotation
-5. **Exit**: Close the program
+4. **Clean up proxy list**: Remove non-working proxies from the list
+5. **Start proxy rotation**: Begin automatic proxy rotation
+6. **Exit**: Close the program
 
 ### Proxy Rotation
 
